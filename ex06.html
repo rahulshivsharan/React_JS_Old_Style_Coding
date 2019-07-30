@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>React 01</title>		
+	</head>
+	<body>
+		<div id="mainContainer"></div>
+		
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react-dom.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react-router/5.0.1/react-router.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"></link>
+		<script type="text/babel">			
+			var customer_list = [
+				{
+					name : "Jack Nicholson",
+					age : 34,
+					credit : 4567
+				},
+				{
+					name : "Sam Niel",
+					age : 27,
+					credit : 700
+				},
+				{
+					name : "Victor Smith",
+					age : 57,
+					credit : 0
+				},
+				{
+					name : "Denis Hamson",
+					age : 43,
+					credit : 107
+				}
+			];
+			
+			var Customers = React.createClass({
+				getDefaultProps : function(){
+					name : "The Bootstrap Table"
+				},
+				getInitialState : function(){
+					return {
+						list : customer_list
+					}
+				},
+				render : function(){					
+					return (
+						<table className="table">	
+							<caption>{this.props.name}</caption>
+							<thead>								
+								<tr>
+									<th>Name</th>
+									<th>Age</th>
+									<th>Credit</th>
+								</tr>
+							</thead>
+							<tbody>
+								{
+									this.state.list.map(function(customerObj,index){
+										return (
+											<tr>
+												<td>{customerObj["name"]}</td>
+												<td>{customerObj["age"]}</td>
+												<td>{customerObj["credit"]}</td>
+											</tr>
+										)
+									})
+								}
+							</tbody>	
+						</table>
+					);
+				}
+			});			
+			
+			
+			ReactDOM.render(<Customers name="Customer Table" />,document.getElementById("mainContainer"));
+		</script>
+	</body>
+</html>
