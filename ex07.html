@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>React 01</title>		
+	</head>
+	<body>
+		<div id="mainContainer"></div>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react-dom.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react-router/5.0.1/react-router.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"></link>
+		<script type="text/babel">			
+			var countryList = [
+				{
+					name : "France",
+					cities : [					
+						{ name : "Paris", population : 34534334343 },
+						{ name : "Nice", population : 1363434 },
+						{ name : "Marseille", population : 89574623 },
+						{ name : "Lyon", population : 96263435325 }
+					]
+				},
+				{
+					name : "Germany",
+					cities : [						
+						{ name : "Munich", population : 100034243 },
+						{ name : "Berlin", population : 1296867 },
+						{ name : "Hamburg", population : 19675474 },
+						{ name : "Frankruft", population : 1745365353 }
+					]
+				},
+				{
+					name : "Italy",
+					cities : [						
+						{ name : "Rome", population : 104243534 },
+						{ name : "Florence", population : 3265645 },
+						{ name : "Milan", population : 983432525 },
+						{ name : "Venice", population : 16674646 }
+					]
+				}
+			];
+			
+			var CountryInfo = React.createClass({
+				getDefaultProps : function(){
+					name : "The Bootstrap Table"
+				},
+				getInitialState : function(){
+					return {
+						list : countryList,
+						cityList : []
+					}
+				},
+				handleChange : function(event){					
+					var selectedCityList = [], selectedCountryName = event.target.value;
+					console.log(" selectedCountryName ",selectedCountryName);
+					countryList.forEach(function(countryObj, index){
+						if(countryObj.name === selectedCountryName){
+							selectedCityList = countryObj.cities;
+						}
+					});
+					this.setState({
+						cityList : selectedCityList
+					});
+				},
+				render : function(){						
+					return (
+						<div className="container">
+							<div className="row">
+								<div className="col-md-12">
+									<form>
+										<div className="form-group row">
+											<label for="countrySelect" className="col-md-2 col-form-label">Select Country</label>
+											<div className="col-md-10">
+												<select id="countrySelect" className="form-control" onChange={this.handleChange}>
+													<option value="select">Select</option>
+													{														
+														this.state.list.map(function(countryObj,idx){
+															return (																
+																<option value={countryObj.name}>{countryObj["name"]}</option>
+															)
+														})
+													}
+												</select>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							{
+								(this.state.cityList.length > 0) ?
+								(
+									<div className="row">
+										<div className="col-md-12">
+											<table className="table">	
+												<caption>{this.props.name}</caption>
+												<thead>								
+													<tr>
+														<th>Name</th>
+														<th>Age</th>														
+													</tr>
+												</thead>
+												<tbody>
+													{
+														this.state.cityList.map(function(cityObj,index){										
+															return (
+																<tr>
+																	<td>{cityObj["name"]}</td>
+																	<td>{cityObj["population"]}</td>												
+																</tr>
+															)
+														})
+													}
+												</tbody>	
+											</table>	
+										</div>
+									</div>
+								) : (
+									<div className="row"></div>
+								)
+							}
+						</div>						
+					);
+				}
+			});			
+			
+			
+			ReactDOM.render(<CountryInfo name="Country Info" />,document.getElementById("mainContainer"));
+		</script>
+	</body>
+</html>
