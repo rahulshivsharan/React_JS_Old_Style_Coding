@@ -19,8 +19,16 @@
 			}
 			
 			img{
-				width : 100%;
+				width : 25%;
 				height : auto;
+			}
+			
+			.table tr td:nth-child(8){
+				width:15%;
+			}
+			
+			.table tr th:nth-child(8){
+				width:15%;
 			}
 		</style>
 		<script type="text/babel">			
@@ -121,9 +129,12 @@
 				},
 				render : function(){						
 					return (
-						<div className="container">
+						<div className="container-fluid">
+							<nav className="navbar navbar-light bg-light">
+								<span className="navbar-brand mb-0 h1">World Regions</span>
+							</nav>
 							<div className="row">
-								<div className="col-md-12">
+								<div className="col-md-6">
 									<form>
 										<div className="form-group row">
 											<label for="regionSelect" className="col-md-2 col-form-label">Select Country</label>
@@ -148,9 +159,9 @@
 								(
 									<div className="row">
 										<div className="col-md-12">
-											<table className="table">	
+											<table className="table table-striped">	
 												<caption>{this.props.name}</caption>
-												<thead>								
+												<thead className="thead-light">								
 													<tr>
 														<th>Name</th>
 														<th>Native Name</th>	
