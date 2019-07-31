@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>React 01</title>		
+	</head>
+	<body>
+		<div id="mainContainer"></div>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.0.0/react-dom.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/react-router/5.0.1/react-router.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script type="text/javaScript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"></link>
+		<style type="text/css">
+			.container{
+				margin : 0 0 0 0;
+				width : 100%;
+			}
+			
+			img{
+				width : 100%;
+				height : auto;
+			}
+		</style>
+		<script type="text/babel">			
+			var regionList = [
+				{
+					display : "European Union",
+					value : "EU"
+				},
+				{
+					display : "European Free Trade Association",
+					value : "EFTA"
+				},
+				{
+					display : "Caribbean Community",
+					value : "CARICOM"
+				},
+				{
+					display : "Pacific Alliance",
+					value : "PA"
+				},
+				{
+					display : "African Union",
+					value : "AU"
+				},
+				{
+					display : "Union of South American Nations",
+					value : "USAN"
+				},
+				{
+					display : "Eurasian Economic Union",
+					value : "EEU"
+				},
+				{
+					display : "Arab League",
+					value : "AL"
+				},
+				{
+					display : "Association of Southeast Asian Nations",
+					value : "ASEAN"
+				},
+				{
+					display : "Central American Integration System",
+					value : "CAIS"
+				},
+				{
+					display : "Central European Free Trade Agreement",
+					value : "CEFTA"
+				},
+				{
+					display : "North American Free Trade Agreement",
+					value : "NAFTA"
+				},
+				{
+					display : "South Asian Association for Regional Cooperation",
+					value : "SAARC"
+				}	
+			];
+			
+			var CountryInfo = React.createClass({
+				getDefaultProps : function(){
+					name : "The Bootstrap Table"
+				},
+				getInitialState : function(){
+					return {
+						"regionList" : regionList,
+						"infoList" : []
+					}
+				},
+				handleChange : function(event){					
+					var selectedInfoList = [], 
+						selectedRegion = event.target.value,
+						url = "https://restcountries.eu/rest/v2/regionalbloc/" + selectedRegion,
+						date = new Date(),
+						me = this;
+					
+					var loader = <div className='spinner-border' role='status'><span className='sr-only'>Loading...</span></div>;
+					
+					url += "?date"+ date.getTime();
+					
+					
+					me.setState({
+						"infoList" : [],
+						"loader" : loader
+					});
+					
+					jQuery.get(url,function(response){						
+						me.setState({
+							infoList : response,
+							"loader" : ""
+						});
+					}).fail(function(error){
+						console.log("error ",error);
+					}).always(function(){
+						console.log(" Get Reqion Info completed ");
+					});
+					
+					
+				},
+				render : function(){						
+					return (
+						<div className="container">
+							<div className="row">
+								<div className="col-md-12">
+									<form>
+										<div className="form-group row">
+											<label for="regionSelect" className="col-md-2 col-form-label">Select Country</label>
+											<div className="col-md-10">
+												<select id="regionSelect" className="form-control" onChange={this.handleChange}>
+													<option value="select">Select</option>
+													{														
+														this.state.regionList.map(function(regionObj,idx){
+															return (																
+																<option value={regionObj.value}>{regionObj["display"]}</option>
+															)
+														})
+													}
+												</select>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							{
+								(this.state.infoList.length > 0) ?
+								(
+									<div className="row">
+										<div className="col-md-12">
+											<table className="table">	
+												<caption>{this.props.name}</caption>
+												<thead>								
+													<tr>
+														<th>Name</th>
+														<th>Native Name</th>	
+														<th>Region</th>		
+														<th>Sub-Region</th>
+														<th>Code</th>	
+														<th>Capital</th>	
+														<th>Demonym</th>
+														<th>Languages</th>
+														<th>Flag</th>
+													</tr>
+												</thead>
+												<tbody>
+													{
+														this.state.infoList.map(function(infoObj,index){										
+															return (
+																<tr>
+																	<td>{infoObj["name"]}</td>
+																	<td>{infoObj["nativeName"]}</td>	
+																	<td>{infoObj["region"]}</td>	
+																	<td>{infoObj["subregion"]}</td>		
+																	<td>{infoObj["alpha2Code"]}</td>
+																	<td>{infoObj["capital"]}</td>																		
+																	<td>{infoObj["demonym"]}</td>
+																	<td>	
+																		<ul>
+																		{
+																			
+																			infoObj.languages.map(function(langObj,j){
+																				return (
+																					<li>{langObj["name"]}</li>
+																				)
+																			})
+																		}
+																		</ul>
+																	</td>
+																	<td><img src={infoObj["flag"]} alt={infoObj["name"]} /></td>
+																</tr>
+															)
+														})
+													}
+												</tbody>	
+											</table>	
+										</div>
+									</div>
+								) : (
+									<div className="row">
+										<div className="col-md-12">
+											{(
+												this.state.loader
+											)}
+										</div>
+									</div>
+								)
+							}
+						</div>						
+					);
+				}
+			});			
+			
+			
+			ReactDOM.render(<CountryInfo name="Country Info" />,document.getElementById("mainContainer"));
+		</script>
+	</body>
+</html>
